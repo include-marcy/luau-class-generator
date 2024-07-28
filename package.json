@@ -1,0 +1,97 @@
+{
+  "name": "luau-library-class-generator",
+  "displayName": "Luau Library Class Generator",
+  "description": "Creates boiler plate and extended information for a fully feature rich and type strict class in luau for use in professional libraries",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.91.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "luau-library-class-generator.newClass",
+        "title": "LLC: New Class"
+      },
+      {
+        "command": "luau-library-class-generator.setTypesFile",
+        "title": "LLC: Set Types File"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .lua || resourceExtname == .luau",
+          "command": "luau-library-class-generator.newClass"
+        },
+        {
+          "when": "resourceExtname == .lua || resourceExtname == .luau",
+          "command": "luau-library-class-generator.setTypesFile"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Luau Library Class Generator",
+      "properties": {
+        "luau-library-class-generator.includeLicensePreamble": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include a license preamble with the authorship information included."
+        },
+        "luau-library-class-generator.includeStrictFFlag": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include a --!strict flag in boilerplate"
+        },
+        "luau-library-class-generator.includeNativeFFlag": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include a --!native flag in boilerplate"
+        },
+        "luau-library-class-generator.includeOptimize2FFlag": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include a --!optimize 2 flag in boilerplate"
+        },
+        "luau-library-class-generator.licenseName": {
+          "type": "string",
+          "default": "MIT License",
+          "description": "The name of the license which generated classes will be referencing."
+        },
+        "luau-library-class-generator.libraryName": {
+          "type": "string",
+          "default": "...",
+          "description": "The name of the library which generated classes will be referencing."
+        },
+        "luau-library-class-generator.libraryTypeFile": {
+          "type": "string",
+          "default": "",
+          "description": "The type file describing type information about the library."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.91.0",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.11.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0"
+  }
+}
