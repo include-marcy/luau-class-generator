@@ -2,7 +2,9 @@
   <img src="Assets/LCGTextLogo2.png">
 </p>
 
+<div align="center">
 ![DOCS](https://img.shields.io/badge/latest_release-v1.0.3-blue?style=flat-square&logo=Roblox%20Studio)  ![Production](https://img.shields.io/badge/production-yes-green?style=flat-square&logo=Roblox%20Studio)
+</div>
 
 # About the Luau Class Generator
 This is a utility tool designed to automatically generate the boiler plate of a specialized and professional Luau Class module. It also defines type information for the Class and defines a CreateInfo type which can be automatically generated in a configurable Types module.
