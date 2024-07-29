@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Assets/LCGTextLogo.png">
+  <img src="Assets/LCGTextLogo2.png">
 </p>
 
 # Luau Class Generator
