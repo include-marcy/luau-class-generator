@@ -2,7 +2,7 @@
   "name": "luau-class-generator",
   "displayName": "Luau Class Generator",
   "description": "Creates boiler plate and extended information for a fully feature rich and type strict class in luau for use in professional libraries",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "MarcelineCroyle",
   "engines": {
     "vscode": "^1.91.0"
@@ -33,6 +33,10 @@
         "title": "LCG: New Class"
       },
       {
+        "command": "luau-class-generator.newFileAndClass",
+        "title": "LCG: New File + Class"
+      },
+      {
         "command": "luau-class-generator.setTypesFile",
         "title": "LCG: Set Types File"
       },
@@ -46,6 +50,10 @@
         {
           "when": "resourceExtname == .lua || resourceExtname == .luau",
           "command": "luau-class-generator.newClass"
+        },
+        {
+          "when": "resourceExtname == ",
+          "command": "luau-class-generator.newFileAndClass"
         },
         {
           "when": "resourceExtname == .lua || resourceExtname == .luau",
@@ -85,7 +93,7 @@
           "default": true,
           "description": "Include a --!optimize 2 flag in boilerplate"
         },
-        "lua-class-generator.licenseName": {
+        "luau-class-generator.licenseName": {
           "type": "string",
           "default": "MIT License",
           "description": "The name of the license which generated classes will be referencing."

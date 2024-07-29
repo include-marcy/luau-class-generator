@@ -92,15 +92,13 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 		});
 
-		
-
 	});
 	context.subscriptions.push(newMethod);
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	const newClass = vscode.commands.registerCommand('luau-class-generator.newClass', (Uri: vscode.Uri) => {
+	function createNewClassMethod(Uri: vscode.Uri) {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		if (Uri === undefined) {
@@ -179,7 +177,7 @@ export function activate(context: vscode.ExtensionContext) {
 					if (str === undefined) {
 						str = "No definition provided.";
 					}
-		
+
 					vscode.workspace.openTextDocument(Uri).then((document) => {
 						let text = document.getText();
 						
@@ -205,7 +203,7 @@ export function activate(context: vscode.ExtensionContext) {
 						if (!preambleIncluded) {
 							preamble = "";
 						}
-		
+
 						let typesPathRelativeToScript = "script";
 						let TypesFileUriPath : string | undefined = llcgConfig.get("libraryTypeFile");
 						if (TypesFileUriPath) {
@@ -282,8 +280,8 @@ export function activate(context: vscode.ExtensionContext) {
 						}
 						let typeModuleVarName = `${libPrefix}Types`;
 		
-						let newContent: string = `${preamble}-- Library Dependencies\nlocal ${typeModuleVarName} = require(${typesPathRelativeToScript});\n\n-- Class Definition\nlocal ${className} = {};\n${className}.__index = ${className};\n\n-- Type Definition\nexport type ${className} = typeof(setmetatable({} :: {\n\t${classStringName} : "${className}";\n}, {} :: typeof(${className})))\n\n--[==[\n\t@class ${className}\n\n\t${str}\n\n\t@param ${className}CreateInfo;\n\t@return ${className};\n]==]\nfunction ${className}.new(${className}CreateInfo : ${typeModuleVarName}.${className}CreateInfo) : ${className}\n\tlocal class = setmetatable({}, ${className});\n\tclass.${classStringName} = "${className}";\n\tclass.name = ${className}CreateInfo.name;\n\n\treturn class;\nend\n\n--[==[\n\t@class ${className}\n\n]==]\nfunction ${className}:${libPrefix}Foo()\n\nend\n\nreturn ${className};`;
-			
+						let newContent: string = `${preamble}-- Library Dependencies\nlocal ${typeModuleVarName} = require(${typesPathRelativeToScript});\n\n-- Class Definition\nlocal ${className} = {};\n${className}.__index = ${className};\n\n-- Type Definition\nexport type ${className} = typeof(setmetatable({} :: {\n\t${classStringName} : "${className}";\n}, {} :: typeof(${className})))\n\n--[==[\n\t@lib ${libname}\n\t@class ${className}\n\n\t${str}\n\n\t@param ${className}CreateInfo;\n\t@return ${className};\n]==]\nfunction ${className}.new(${className}CreateInfo : ${typeModuleVarName}.${className}CreateInfo) : ${className}\n\tlocal class = setmetatable({}, ${className});\n\tclass.${classStringName} = "${className}";\n\tclass.name = ${className}CreateInfo.name;\n\n\treturn class;\nend\n\n--[==[\n\t@lib ${libname}\n\t@class ${className}\n\n]==]\nfunction ${className}:${libPrefix}Foo()\n\nend\n\nreturn ${className};`;
+						/*
 						const editor = vscode.window.activeTextEditor;
 						let n = new vscode.Position(0, 1);
 						let linecount = editor?.document.lineCount;
@@ -292,7 +290,7 @@ export function activate(context: vscode.ExtensionContext) {
 						}
 	
 						let p = new vscode.Position(linecount, 1);
-					
+						
 						let range = new vscode.Range(n, p);
 						if (editor) {
 							const document = editor.document;
@@ -301,6 +299,12 @@ export function activate(context: vscode.ExtensionContext) {
 								editBuilder.replace(range, newContent);
 							});
 						}
+						*/
+						vscode.workspace.fs.writeFile(Uri, Buffer.from(newContent)).then(function() {
+							vscode.workspace.openTextDocument(Uri).then((doc : vscode.TextDocument) => {
+								vscode.window.showTextDocument(doc);
+							});
+						});
 					  });
 				});
 			}
@@ -346,9 +350,41 @@ export function activate(context: vscode.ExtensionContext) {
 		} else {
 			RunBoilerplate();
 		}
+	}
+	const newClass = vscode.commands.registerCommand('luau-class-generator.newClass', (Uri: vscode.Uri) => {
+		createNewClassMethod(Uri);
 	});
-
 	context.subscriptions.push(newClass);
+
+	const newFileAndClass = vscode.commands.registerCommand('luau-class-generator.newFileAndClass', (Uri: vscode.Uri) => {
+		if (Uri === undefined) {
+			vscode.window.showErrorMessage("No folder provided when attempting to create a new file and Luau Class!");
+			return;
+		}
+		let libPrefix : string | undefined = llcgConfig.get("libraryPrefix");
+
+		vscode.window.showInputBox({
+			"value": `${libPrefix}`,
+			"prompt": "Name new Luau class",
+			"title": "Class Name",
+			"placeHolder": `${libPrefix}`,
+		}).then(function(className : string | undefined) {
+			if (className === undefined) {
+				return;
+			}
+			vscode.window.showInformationMessage(`Initializing LCG new class ${className}`);
+			const wsedit = new vscode.WorkspaceEdit();
+			const wsPath = Uri.fsPath;
+			const filePath = vscode.Uri.file(wsPath + `/${className}.luau`);
+			vscode.window.showInformationMessage(filePath.toString());
+			wsedit.createFile(filePath, { ignoreIfExists: true });
+			vscode.workspace.applyEdit(wsedit);
+			vscode.window.showInformationMessage(`Created a new file: ${className}.luau`);
+
+			createNewClassMethod(filePath);
+		});
+	});
+	context.subscriptions.push(newFileAndClass);
 }
 
 // This method is called when your extension is deactivated
