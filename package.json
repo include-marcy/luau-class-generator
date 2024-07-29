@@ -2,7 +2,7 @@
   "name": "luau-class-generator",
   "displayName": "Luau Class Generator",
   "description": "Creates boiler plate and extended information for a fully feature rich and type strict class in luau for use in professional libraries",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "MarcelineCroyle",
   "engines": {
     "vscode": "^1.91.0"
@@ -18,7 +18,7 @@
     "generator",
     "class"
   ],
-  "icon": "Assets/LCGTextLogo2.png",
+  "icon": "Assets/LCGTextLogo3.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/include-marcy/luau-class-generator"

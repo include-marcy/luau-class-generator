@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Assets/LCGTextLogo2.png">
+  <img src="Assets/LCGTextLogo3.png">
 </p>
 
 <div align="center">
