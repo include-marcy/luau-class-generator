@@ -2,19 +2,18 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { window, commands, ExtensionContext } from 'vscode';
-import { multiStepInput } from './fileRename';
 import { posix } from 'path';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	let llcgConfig = vscode.workspace.getConfiguration('luau-library-class-generator');
+	let llcgConfig = vscode.workspace.getConfiguration('luau-class-generator');
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	let TypesFileUriPath = llcgConfig.get("libraryTypeFile");
 
-	const N = vscode.commands.registerCommand('luau-library-class-generator.setTypesFile', (Uri : vscode.Uri) => {
+	const setTypesFile = vscode.commands.registerCommand('luau-class-generator.setTypesFile', (Uri : vscode.Uri) => {
 		TypesFileUriPath = Uri.path;
 
 		llcgConfig.update("libraryTypeFile", TypesFileUriPath);
@@ -22,12 +21,86 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log(llcgConfig.get("libraryTypeFile"));
 	});
 
-	context.subscriptions.push(N);
+	context.subscriptions.push(setTypesFile);
+
+	const newMethod = vscode.commands.registerCommand('luau-class-generator.newMethod', (Uri : vscode.Uri) => {
+		if (Uri === undefined) {
+			let possibleUri = vscode.window.activeTextEditor?.document.uri;
+			if (possibleUri) {
+				Uri = possibleUri;
+			} else {
+				return;
+			}
+		}
+
+		let className : string;
+		let codec: string = Uri.path;
+		let libname = llcgConfig.get("libraryName");
+		let libPrefix : string | undefined = llcgConfig.get("libraryPrefix");
+
+		while(codec.match("/")) {
+			codec = codec.slice(1);
+		}
+
+		let fileStrData = codec.split(".");
+		let isUsingInitMethodology = false;
+		className = fileStrData[0];
+
+		if (className === "init") {
+			let pathSplit = Uri.path.split("/");
+			let folderParentName = pathSplit[pathSplit.length - 2];
+
+			console.log(folderParentName, "folder name");
+
+			isUsingInitMethodology = true;
+			className = folderParentName;
+		}
+
+		let extensionLuaOrLuau = fileStrData[1].trim();
+
+		vscode.window.showInputBox({
+			"value": `${libPrefix}`,
+			"prompt": "Name the method.",
+			"title": "Method Name",
+			"placeHolder": `${libPrefix}`,
+		}).then(function(methodName : string | undefined) {
+			if (methodName === undefined) {
+				return;
+			}
+			vscode.window.showInformationMessage(`Initializing LCG new method ${methodName}`);
+			vscode.window.showInputBox({
+				"value": `${methodName} is designed to `,
+				"prompt": "Describe the method's purpose.",
+				"title": "Description",
+				"placeHolder": `${methodName} is designed to `,
+			}).then(function(methodDescription : string | undefined) {
+				if (methodDescription === "" || methodDescription === undefined) {
+					methodDescription = "No description provided.";
+				}
+
+				vscode.workspace.openTextDocument(Uri).then((doc) => {
+					let newSource = doc.getText();
+					let newMethodDefinition = `--[==[\n\t@lib ${libname}\n\t@class ${className}\n\n\t${methodDescription}\n]==]\nfunction ${className}:${methodName}()\n\nend\n\n`;
+		
+					let idxBackcast = newSource.lastIndexOf("return");
+					let front = newSource.slice(0, idxBackcast);
+					let back = newSource.slice(idxBackcast, newSource.length);
+					newSource = front + newMethodDefinition + back;
+					
+					vscode.workspace.fs.writeFile(Uri, Buffer.from(newSource));
+				});
+			});
+		});
+
+		
+
+	});
+	context.subscriptions.push(newMethod);
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('luau-library-class-generator.newClass', (Uri: vscode.Uri) => {
+	const newClass = vscode.commands.registerCommand('luau-class-generator.newClass', (Uri: vscode.Uri) => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		if (Uri === undefined) {
@@ -71,7 +144,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		function RunBoilerplate() {
-			vscode.window.showInformationMessage('Initializing LLCG new type definition ' + className + "CreateInfo");
+			vscode.window.showInformationMessage('Initializing LCG new type definition ' + className + "CreateInfo");
 			DeclareType();
 			let TypesFileUriPath : string | undefined = llcgConfig.get("libraryTypeFile");
 			let newTypeDefinition = `export type ${className}CreateInfo = {\n\tname : string;\n};\n\n`;
@@ -95,7 +168,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 
 			function DeclareClassAndBoilerPlate() {
-				vscode.window.showInformationMessage('Initializing LLCG new class named ' + className);
+				vscode.window.showInformationMessage('Initializing LCG new class named ' + className);
 
 				vscode.window.showInputBox({
 					"value": `The ${className} class is `,
@@ -275,7 +348,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(newClass);
 }
 
 // This method is called when your extension is deactivated

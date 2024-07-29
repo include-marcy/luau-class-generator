@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="Assets/LLCGTextLogo.png">
+  <img src="Assets/LCGTextLogo.png">
 </p>
 
-# Luau Library Class Generator
+# Luau Class Generator
 This is a utility tool designed to automatically generate the boiler plate of a specialized and professional Luau Class module. It also defines type information for the Class and defines a CreateInfo type which can be automatically generated in a configurable Types module.
 
 # Features:
@@ -13,6 +13,11 @@ This is a utility tool designed to automatically generate the boiler plate of a 
 
 # Release Notes
 This is the official release notes section for the Luau Library Class Generator VSC Extension.
+
+# v1.0.1.7.28.24
+* Added command: LCG: Add Class Method to allow generation of a method in a class file.
+* Changed extension official name to "Luau Class Generator".
+* Added Commented Descriptions Toggle setting
 
 # v1.0.0.7.28.24
 * Full release of the extension

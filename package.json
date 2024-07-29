@@ -1,8 +1,8 @@
 {
-  "name": "luau-library-class-generator",
-  "displayName": "Luau Library Class Generator",
+  "name": "luau-class-generator",
+  "displayName": "Luau Class Generator",
   "description": "Creates boiler plate and extended information for a fully feature rich and type strict class in luau for use in professional libraries",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "MarcelineCroyle",
   "engines": {
     "vscode": "^1.91.0"
@@ -18,10 +18,10 @@
     "generator",
     "class"
   ],
-  "icon": "/Assets/LLCGTextLogo.png",
+  "icon": "Assets/LCGTextLogo.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/include-marcy/luau-library-class-generator"
+    "url": "https://github.com/include-marcy/luau-class-generator"
   },
   "activationEvents": [],
   "main": "./out/extension.js",
@@ -29,65 +29,78 @@
   "contributes": {
     "commands": [
       {
-        "command": "luau-library-class-generator.newClass",
-        "title": "LLC: New Class"
+        "command": "luau-class-generator.newClass",
+        "title": "LCG: New Class"
       },
       {
-        "command": "luau-library-class-generator.setTypesFile",
-        "title": "LLC: Set Types File"
+        "command": "luau-class-generator.setTypesFile",
+        "title": "LCG: Set Types File"
+      },
+      {
+        "command": "luau-class-generator.newMethod",
+        "title": "LCG: Add Class Method"
       }
     ],
     "menus": {
       "explorer/context": [
         {
           "when": "resourceExtname == .lua || resourceExtname == .luau",
-          "command": "luau-library-class-generator.newClass"
+          "command": "luau-class-generator.newClass"
         },
         {
           "when": "resourceExtname == .lua || resourceExtname == .luau",
-          "command": "luau-library-class-generator.setTypesFile"
+          "command": "luau-class-generator.setTypesFile"
+        },
+        {
+          "when": "resourceExtname == .lua || resourceExtname == .luau",
+          "command": "luau-class-generator.newMethod"
         }
       ]
     },
     "configuration": {
-      "title": "Luau Library Class Generator",
+      "title": "Luau Class Generator",
       "properties": {
-        "luau-library-class-generator.includeLicensePreamble": {
+        "luau-class-generator.includeLicensePreamble": {
           "type": "boolean",
           "default": true,
           "description": "Include a license preamble with the authorship information included."
         },
-        "luau-library-class-generator.includeStrictFFlag": {
+        "luau-class-generator.includeDescriptions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include a commented description above information-tracking heavy areas (class methods)."
+        },
+        "luau-class-generator.includeStrictFFlag": {
           "type": "boolean",
           "default": true,
           "description": "Include a --!strict flag in boilerplate"
         },
-        "luau-library-class-generator.includeNativeFFlag": {
+        "luau-class-generator.includeNativeFFlag": {
           "type": "boolean",
           "default": true,
           "description": "Include a --!native flag in boilerplate"
         },
-        "luau-library-class-generator.includeOptimize2FFlag": {
+        "luau-class-generator.includeOptimize2FFlag": {
           "type": "boolean",
           "default": true,
           "description": "Include a --!optimize 2 flag in boilerplate"
         },
-        "luau-library-class-generator.licenseName": {
+        "lua-class-generator.licenseName": {
           "type": "string",
           "default": "MIT License",
           "description": "The name of the license which generated classes will be referencing."
         },
-        "luau-library-class-generator.libraryName": {
+        "luau-class-generator.libraryName": {
           "type": "string",
           "default": "...",
           "description": "The name of the library which generated classes will be referencing."
         },
-        "luau-library-class-generator.libraryPrefix": {
+        "luau-class-generator.libraryPrefix": {
           "type": "string",
           "default": "",
           "description": "A short string that might prefix common variables and interfaces of this library (e.g \"The Foo Library = \"fooTypes\"\""
         },
-        "luau-library-class-generator.libraryTypeFile": {
+        "luau-class-generator.libraryTypeFile": {
           "type": "string",
           "default": "",
           "description": "The type file describing type information about the library."
