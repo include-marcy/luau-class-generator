@@ -80,7 +80,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 				vscode.workspace.openTextDocument(Uri).then((doc) => {
 					let newSource = doc.getText();
-					let newMethodDefinition = `--[==[\n\t@lib ${libname}\n\t@class ${className}\n\n\t${methodDescription}\n]==]\nfunction ${className}:${methodName}()\n\nend\n\n`;
+					let newMethodDefinition = `--[==[\n\t@lib ${libname}\n\t@class ${className}\n\n\t${methodDescription}\n]==]\nfunction ${className}:${methodName}()\n\tlocal obj : ${className} = self;\n\nend\n\n`;
 		
 					let idxBackcast = newSource.lastIndexOf("return");
 					let front = newSource.slice(0, idxBackcast);
