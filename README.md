@@ -10,6 +10,11 @@
 # About the Luau Class Generator
 This is a utility tool designed to automatically generate the boiler plate of a specialized and professional Luau Class module. It also defines type information for the Class and defines a CreateInfo type which can be automatically generated in a configurable Types module.
 
+<div align="center">
+
+[Luau Class Generator Wiki](https://github.com/include-marcy/luau-class-generator/wiki)
+</div>
+
 # Installation
 * Install this extension with the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=MarcelineCroyle.luau-class-generator)
 * View the [latest release](https://github.com/include-marcy/luau-class-generator/releases) on GitHub
