@@ -12,7 +12,7 @@ This is a utility tool designed to automatically generate the boiler plate of a 
 
 # Installation
 * Install this extension with the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=MarcelineCroyle.luau-class-generator)
-* View the [latest release](https://github.com/include-marcy/luau-class-generator/releases/tag/Release) on GitHub
+* View the [latest release](https://github.com/include-marcy/luau-class-generator/releases) on GitHub
 
 # Features
 * Automatically creates a type-strict module definition of a Luau class with professional syntax usage, type definitions, and a consistent naming scheme.
