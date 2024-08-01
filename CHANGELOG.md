@@ -2,6 +2,9 @@
 
 All notable changes to the "luau-class-generator" extension will be documented in this file.
 
+## [v1.0.6]
+- Comment generation restructured to support [Moonwave](https://eryn.io/moonwave/)
+
 ## [v1.0.5]
 - Patched a bug where the license name configuration was read as undefined.
 - Added a command: `LCG: New File + Class`

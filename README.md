@@ -33,6 +33,9 @@ Luau is [open-source](https://github.com/luau-lang/luau). To see more informatio
 # Release Notes
 This is the official release notes section for the Luau Library Class Generator VSC Extension.
 
+# v1.0.6.7.31.24
+* Comment generation restructured to support [Moonwave](https://eryn.io/moonwave/)
+
 # v1.0.5.7.29.24
 * Added command: LCG: Add File + New Class to allow creation of a class file easily. (Right click a folder)
 * Bug fixes and minor changes

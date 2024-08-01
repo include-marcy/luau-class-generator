@@ -80,7 +80,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 				vscode.workspace.openTextDocument(Uri).then((doc) => {
 					let newSource = doc.getText();
-					let newMethodDefinition = `--[==[\n\t@lib ${libname}\n\t@class ${className}\n\n\t${methodDescription}\n]==]\nfunction ${className}:${methodName}()\n\tlocal obj : ${className} = self;\n\nend\n\n`;
+					let newMethodDefinition = `--[=[\n\t@within ${className}\n\n\t${methodDescription}\n]=]\nfunction ${className}:${methodName}()\n\tlocal obj : ${className} = self;\n\nend\n\n`;
 		
 					let idxBackcast = newSource.lastIndexOf("return");
 					let front = newSource.slice(0, idxBackcast);
@@ -280,7 +280,7 @@ export function activate(context: vscode.ExtensionContext) {
 						}
 						let typeModuleVarName = `${libPrefix}Types`;
 		
-						let newContent: string = `${preamble}-- Library Dependencies\nlocal ${typeModuleVarName} = require(${typesPathRelativeToScript});\n\n-- Class Definition\nlocal ${className} = {};\n${className}.__index = ${className};\n\n-- Type Definition\nexport type ${className} = typeof(setmetatable({} :: {\n\t${classStringName} : "${className}";\n}, {} :: typeof(${className})))\n\n--[==[\n\t@lib ${libname}\n\t@class ${className}\n\n\t${str}\n\n\t@param ${className}CreateInfo;\n\t@return ${className};\n]==]\nfunction ${className}.new(${className}CreateInfo : ${typeModuleVarName}.${className}CreateInfo) : ${className}\n\tlocal class = setmetatable({}, ${className});\n\tclass.${classStringName} = "${className}";\n\tclass.name = ${className}CreateInfo.name;\n\n\treturn class;\nend\n\n--[==[\n\t@lib ${libname}\n\t@class ${className}\n\n]==]\nfunction ${className}:${libPrefix}Foo()\n\nend\n\nreturn ${className};`;
+						let newContent: string = `${preamble}-- Library Dependencies\nlocal ${typeModuleVarName} = require(${typesPathRelativeToScript});\n\n-- Class Definition\n--[=[\n\t@class ${className}\n\n\t${str}\n]=]\nlocal ${className} = {};\n${className}.__index = ${className};\n\n-- Type Definition\nexport type ${className} = typeof(setmetatable({} :: {\n\t${classStringName} : "${className}";\n}, {} :: typeof(${className})))\n\n--[=[\n\t@within ${className}\n\n\t${str}\n\n\t@param ${className}CreateInfo heraTypes.${className}CreateInfo\n\t@return ${className}\n]=]\nfunction ${className}.new(${className}CreateInfo : ${typeModuleVarName}.${className}CreateInfo) : ${className}\n\tlocal class = setmetatable({}, ${className});\n\tclass.${classStringName} = "${className}";\n\tclass.name = ${className}CreateInfo.name;\n\n\treturn class;\nend\n\n--[=[\n\t@within ${className}\n\n]=]\nfunction ${className}:${libPrefix}Foo()\n\nend\n\nreturn ${className};`;
 						/*
 						const editor = vscode.window.activeTextEditor;
 						let n = new vscode.Position(0, 1);
