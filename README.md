@@ -19,6 +19,7 @@ This is a utility tool designed to automatically generate the boiler plate of a 
 * Automatically adds type information to a designated file which can instruct users of the interfaces you create about how to build the objects your library contains.
 * Automatically adds Luau Dynamic/Fast Flags to the tops of class files.
 * Adds a best practice configurable copyright notice to the top of files.
+* Adds [Moonwave](https://eryn.io/moonwave/) tags automatically.
 
 ---
 
